@@ -3,16 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# Directory containing CSV files
 data_dir = "simulation_results"
 
-# Names of the simulation variables
 sim_vars = ["Bn", "Un", "Cn", "Dn", "Dn_minus_Cn"]
 
-# Dictionary to hold dataframes
 data = {}
 
-# Load CSV files
 for var in sim_vars:
     file_path = os.path.join(data_dir, f"{var}.csv")
     if not os.path.exists(file_path):
@@ -21,17 +17,14 @@ for var in sim_vars:
     df = pd.read_csv(file_path)
     data[var] = df
 
-# Plot individual repetitions and mean for each simulation
 for var, df in data.items():
     n_values = df['n'].values
-    repetitions = df.drop(columns='n').values  # shape = (len(n_values), k)
+    repetitions = df.drop(columns='n').values  
     mean_values = repetitions.mean(axis=1)
 
     plt.figure(figsize=(10,6))
-    # Individual repetitions (semi-transparent)
     for k in range(repetitions.shape[1]):
         plt.plot(n_values, repetitions[:, k], color='blue', alpha=0.3)
-    # Mean
     plt.plot(n_values, mean_values, color='red', linewidth=2, label='Mean')
     plt.xlabel("n")
     plt.ylabel(var)
@@ -42,7 +35,6 @@ for var, df in data.items():
     plt.savefig(os.path.join(data_dir, f"{var}_plot.png"))
     plt.show()
 
-# Now compute requested ratios / normalizations
 
 def compute_and_plot_ratio(var_name, mean_values, n_values, ratios_dict):
     plt.figure(figsize=(10,6))
@@ -57,7 +49,6 @@ def compute_and_plot_ratio(var_name, mean_values, n_values, ratios_dict):
     plt.savefig(os.path.join(data_dir, f"{var_name}_ratios.png"))
     plt.show()
 
-# (a) Bn ratios
 Bn_mean = data["Bn"].drop(columns='n').mean(axis=1).values
 compute_and_plot_ratio(
     "Bn",
@@ -69,7 +60,6 @@ compute_and_plot_ratio(
     }
 )
 
-# (b) Un ratios
 Un_mean = data["Un"].drop(columns='n').mean(axis=1).values
 compute_and_plot_ratio(
     "Un",
@@ -80,7 +70,6 @@ compute_and_plot_ratio(
     }
 )
 
-# (c) Cn ratios
 Cn_mean = data["Cn"].drop(columns='n').mean(axis=1).values
 compute_and_plot_ratio(
     "Cn",
@@ -93,7 +82,6 @@ compute_and_plot_ratio(
     }
 )
 
-# (d) Dn ratios
 Dn_mean = data["Dn"].drop(columns='n').mean(axis=1).values
 compute_and_plot_ratio(
     "Dn",
@@ -106,7 +94,6 @@ compute_and_plot_ratio(
     }
 )
 
-# (e) Dn-Cn ratios
 DnCn_mean = data["Dn_minus_Cn"].drop(columns='n').mean(axis=1).values
 compute_and_plot_ratio(
     "Dn_minus_Cn",

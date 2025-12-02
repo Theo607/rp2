@@ -13,11 +13,9 @@ void print_sample_results(simulation& sim, const std::string& name) {
 }
 
 int main() {
-    // Define n and k ranges
     int n_start = 5, n_end = 20, n_step = 5;
     int k_value = 10;
 
-    // Create simulation objects with custom ranges
     simulation_Bn simBn(n_start, n_end, n_step, k_value);
     simulation_Un simUn(n_start, n_end, n_step, k_value);
     simulation_Cn simCn(n_start, n_end, n_step, k_value);
@@ -32,7 +30,6 @@ int main() {
     simDn.simulate();
     simDnMinusCn.simulate();
 
-    // Print a sample of results for verification
     print_sample_results(simBn, "Bn");
     print_sample_results(simUn, "Un");
     print_sample_results(simCn, "Cn");

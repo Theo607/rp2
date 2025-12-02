@@ -8,12 +8,11 @@
 
 class simulation {
 protected:
-    std::vector<int> n_values;  // list of n's
-    int k_value = 50;           // repetitions
-    int** result = nullptr;     // rows = n_values.size(), cols = k_value
+    std::vector<int> n_values;  
+    int k_value = 50;          
+    int** result = nullptr;   
 
 public:
-    // Constructor with flexible n and k ranges
     simulation(int n_start = 1, int n_end = 10, int n_step = 1, int k_val = 50)
         : k_value(k_val)
     {
@@ -48,12 +47,9 @@ public:
     int get_k_value() const { return k_value; }
 };
 
-// ---------------- Optimized Derived Classes ----------------
-
-// (a) Bn – first collision
 class simulation_Bn : public simulation {
 public:
-    using simulation::simulation; // inherit constructor
+    using simulation::simulation; 
 
     void simulate() override {
         for (size_t ni = 0; ni < n_values.size(); ++ni) {
@@ -71,7 +67,6 @@ public:
     }
 };
 
-// (b) Un – number of empty urns after n balls
 class simulation_Un : public simulation {
 public:
     using simulation::simulation;
@@ -88,7 +83,6 @@ public:
     }
 };
 
-// (c) Cn – first time all urns have ≥1 ball
 class simulation_Cn : public simulation {
 public:
     using simulation::simulation;
@@ -120,13 +114,12 @@ public:
                 urns.clear();
                 int count = 0;
 
-                // Track bins with less than 2 balls
                 std::size_t bins_lt2 = n;
 
                 while (bins_lt2 > 0) {
                     count++;
-                    std::size_t idx = urns.dist(urns.rng); // use internal RNG
-                    if (urns.arr[idx] == 1) bins_lt2--; // going from 1 -> 2
+                    std::size_t idx = urns.dist(urns.rng); 
+                    if (urns.arr[idx] == 1) bins_lt2--; 
                     urns.arr[idx]++;
                 }
 
@@ -148,10 +141,8 @@ public:
                 int count = 0;
                 int C = 0;
 
-                // Track empty bins for Cn
                 std::size_t empty_bins = n;
 
-                // First reach Cn
                 while (empty_bins > 0) {
                     count++;
                     std::size_t idx = urns.dist(urns.rng);
@@ -160,16 +151,14 @@ public:
                 }
                 C = count;
 
-                // Track bins with <2 balls for Dn
                 std::size_t bins_lt2 = 0;
                 for (auto balls : urns.arr)
                     if (balls < 2) bins_lt2 = bins_lt2 + 1;
 
-                // Continue until all bins >=2
                 while (bins_lt2 > 0) {
                     count++;
                     std::size_t idx = urns.dist(urns.rng);
-                    if (urns.arr[idx] == 1) bins_lt2--; // bin reaches 2
+                    if (urns.arr[idx] == 1) bins_lt2--; 
                     urns.arr[idx]++;
                 }
 

@@ -2,10 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <filesystem> // C++17
+#include <filesystem> 
 namespace fs = std::filesystem;
 
-// Save results to CSV
 void save_results_csv(const std::string& filename, simulation& sim) {
     std::ofstream file(filename);
     if (!file.is_open()) {
@@ -16,13 +15,11 @@ void save_results_csv(const std::string& filename, simulation& sim) {
     const auto& n_values = sim.get_n_values();
     int k_value = sim.get_k_value();
 
-    // Header
     file << "n";
     for (int k = 0; k < k_value; ++k)
         file << ",run" << (k + 1);
     file << "\n";
 
-    // Data
     for (size_t i = 0; i < n_values.size(); ++i) {
         file << n_values[i];
         for (int k = 0; k < k_value; ++k) {
@@ -36,20 +33,17 @@ void save_results_csv(const std::string& filename, simulation& sim) {
 }
 
 int main() {
-    // Directory for CSV files
     std::string output_dir = "simulation_results";
     if (!fs::exists(output_dir)) {
         fs::create_directory(output_dir);
         std::cout << "Created directory: " << output_dir << "\n";
     }
 
-    // Simulation parameters
     int n_start = 1000;
     int n_end = 100000;
     int n_step = 1000;
     int k_value = 50;
 
-    // Create simulations
     simulation_Bn simBn(n_start, n_end, n_step, k_value);
     simulation_Un simUn(n_start, n_end, n_step, k_value);
     simulation_Cn simCn(n_start, n_end, n_step, k_value);
@@ -67,7 +61,6 @@ int main() {
     std::cout << "Running Dn-Cn simulation...\n";
     simDnMinusCn.simulate();
 
-    // Save results to CSV
     save_results_csv(output_dir + "/Bn.csv", simBn);
     save_results_csv(output_dir + "/Un.csv", simUn);
     save_results_csv(output_dir + "/Cn.csv", simCn);
